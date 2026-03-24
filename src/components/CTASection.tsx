@@ -38,8 +38,8 @@ export default function CTASection({
   };
 
   return (
-    <section className={`py-16 md:py-20 ${bgClasses[background]}`}>
-      <div className="container-custom text-center">
+    <section className={`py-16 md:py-20 ${bgClasses[background]} texture-lines-light divider-angle-top`}>
+      <div className="container-custom text-center content-above">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
         <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">{subtitle}</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

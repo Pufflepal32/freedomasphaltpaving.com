@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Lato } from "next/font/google";
+import { Lato, Teko } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -8,6 +8,12 @@ const lato = Lato({
   weight: ['300', '400', '700', '900'],
   subsets: ["latin"],
   variable: "--font-lato",
+});
+
+const teko = Teko({
+  weight: ['400', '600', '700'],
+  subsets: ["latin"],
+  variable: "--font-teko",
 });
 
 export const metadata: Metadata = {
@@ -32,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${lato.variable} font-sans antialiased`}>
+      <body className={`${lato.variable} ${teko.variable} font-sans antialiased`}>
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

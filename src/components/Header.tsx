@@ -4,33 +4,58 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 
-const navigation = [
-  { name: 'Services', href: '/services' },
-  { name: 'Locations', href: '/locations' },
-  { name: 'Projects', href: '/projects' },
+interface NavItem {
+  name: string;
+  href: string;
+  children?: { name: string; href: string }[];
+}
+
+const navigation: NavItem[] = [
+  { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
+  {
+    name: 'Services',
+    href: '/services',
+    children: [
+      { name: 'Sealcoating', href: '/services/sealcoating' },
+      { name: 'Crack Repair', href: '/services/crack-repair' },
+      { name: 'Striping', href: '/services/striping' },
+      { name: 'Asphalt Repair', href: '/services/asphalt-repair' },
+      { name: 'Patching', href: '/services/patching' },
+      { name: 'Pressure Washing', href: '/services/pressure-washing' },
+    ],
+  },
+  { name: 'Gallery', href: '/gallery' },
+  { name: 'Reviews', href: '/reviews' },
+  { name: 'Blog', href: '/blog' },
+  {
+    name: 'Locations',
+    href: '/locations',
+    children: [
+      { name: 'Raleigh', href: '/locations/raleigh' },
+      { name: 'Durham', href: '/locations/durham' },
+      { name: 'Cary', href: '/locations/cary' },
+      { name: 'Wake Forest', href: '/locations/wake-forest' },
+      { name: 'Chapel Hill', href: '/locations/chapel-hill' },
+      { name: 'Greensboro', href: '/locations/greensboro' },
+      { name: 'Fayetteville', href: '/locations/fayetteville' },
+      { name: 'Apex', href: '/locations/apex' },
+    ],
+  },
   { name: 'Contact', href: '/contact' },
 ];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  const toggleMobileDropdown = (name: string) => {
+    setOpenDropdown(openDropdown === name ? null : name);
+  };
 
   return (
-    <header className="bg-secondary sticky top-0 z-50">
-      {/* Top bar with phone */}
-      <div className="bg-primary py-2">
-        <div className="container-custom flex justify-center md:justify-end">
-          <a
-            href="tel:919-945-6371"
-            className="text-white font-semibold hover:text-gray-200 transition-colors"
-          >
-            Call Us: (919) 945-6371
-          </a>
-        </div>
-      </div>
-
-      {/* Main navigation */}
-      <nav className="container-custom py-4">
+    <header className="bg-navy-gradient sticky top-0 z-50">
+      <nav className="container-custom py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
@@ -39,39 +64,69 @@ export default function Header() {
               alt="Freedom Asphalt"
               width={80}
               height={80}
-              className="h-16 w-auto md:h-20"
+              className="h-14 w-auto xl:h-16"
               priority
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden xl:flex items-center space-x-5">
             {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-white hover:text-accent transition-colors font-medium uppercase tracking-wide"
-              >
-                {item.name}
-              </Link>
+              <div key={item.name} className="relative group">
+                <Link
+                  href={item.href}
+                  className="font-[var(--font-teko)] text-white hover:text-accent transition-colors font-semibold uppercase tracking-wide text-lg flex items-center gap-1"
+                  style={{ fontFamily: 'var(--font-teko), Teko, sans-serif' }}
+                >
+                  {item.name}
+                  {item.children && (
+                    <svg className="w-3 h-3 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                </Link>
+
+                {/* Dropdown */}
+                {item.children && (
+                  <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <div className="bg-white shadow-xl rounded-b-lg py-2 min-w-[200px]">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.name}
+                          href={child.href}
+                          className="block px-5 py-2.5 text-secondary hover:text-primary hover:bg-gray-50 transition-colors font-medium text-sm"
+                        >
+                          {child.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden lg:block">
-            <Link
-              href="/quote"
-              className="bg-primary text-white px-6 py-3 rounded font-semibold hover:bg-primary-dark transition-colors uppercase tracking-wide"
+          {/* Phone CTA Button */}
+          <div className="hidden xl:block">
+            <a
+              href="tel:919-945-6371"
+              className="bg-primary text-white px-5 py-2.5 rounded font-bold hover:bg-primary-dark transition-colors uppercase tracking-wide flex items-center gap-2"
             >
-              Get a Free Quote
-            </Link>
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+              </svg>
+              (919) 945-6371
+            </a>
           </div>
 
           {/* Mobile menu button */}
           <button
             type="button"
-            className="lg:hidden text-white p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="xl:hidden text-white p-2"
+            onClick={() => {
+              setMobileMenuOpen(!mobileMenuOpen);
+              if (mobileMenuOpen) setOpenDropdown(null);
+            }}
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
@@ -88,25 +143,73 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t border-gray-700">
-            <div className="flex flex-col space-y-4 pt-4">
+          <div className="xl:hidden mt-4 pb-4 border-t border-gray-700">
+            {/* Phone CTA at top of mobile menu */}
+            <a
+              href="tel:919-945-6371"
+              className="flex items-center justify-center gap-2 bg-primary text-white py-3 mt-4 rounded font-bold uppercase tracking-wide"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+              </svg>
+              (919) 945-6371
+            </a>
+
+            <div className="flex flex-col space-y-1 pt-4">
               {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-white hover:text-accent transition-colors font-medium uppercase tracking-wide"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
+                <div key={item.name}>
+                  {item.children ? (
+                    <>
+                      <button
+                        onClick={() => toggleMobileDropdown(item.name)}
+                        className="w-full flex items-center justify-between text-white hover:text-accent transition-colors font-semibold uppercase tracking-wide py-2"
+                        style={{ fontFamily: 'var(--font-teko), Teko, sans-serif' }}
+                      >
+                        <span className="text-lg">{item.name}</span>
+                        <svg
+                          className={`w-4 h-4 transition-transform duration-200 ${openDropdown === item.name ? 'rotate-180' : ''}`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      {openDropdown === item.name && (
+                        <div className="pl-4 pb-2 space-y-1">
+                          <Link
+                            href={item.href}
+                            className="block text-gray-300 hover:text-accent transition-colors py-1.5 text-sm"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            All {item.name}
+                          </Link>
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.name}
+                              href={child.href}
+                              className="block text-gray-300 hover:text-accent transition-colors py-1.5 text-sm"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {child.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="block text-white hover:text-accent transition-colors font-semibold uppercase tracking-wide py-2 text-lg"
+                      style={{ fontFamily: 'var(--font-teko), Teko, sans-serif' }}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </div>
               ))}
-              <Link
-                href="/quote"
-                className="bg-primary text-white px-6 py-3 rounded font-semibold hover:bg-primary-dark transition-colors uppercase tracking-wide text-center"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Get a Free Quote
-              </Link>
             </div>
           </div>
         )}
