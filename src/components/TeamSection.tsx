@@ -1,31 +1,19 @@
-import Image from 'next/image';
-
 const teamMembers = [
-  {
-    name: 'Wesley',
-    role: 'Owner / Operator',
-    image: '/images/projects/project-1.jpg',
-    alt: 'Wesley - Owner of Freedom Asphalt Raleigh NC',
-  },
-  {
-    name: 'Marcus T.',
-    role: 'Lead Foreman',
-    image: '/images/projects/project-2.jpg',
-    alt: 'Marcus - Lead Foreman Freedom Asphalt Raleigh NC',
-  },
-  {
-    name: 'Chris D.',
-    role: 'Sealcoating Specialist',
-    image: '/images/projects/project-3.jpg',
-    alt: 'Chris - Sealcoating Specialist Freedom Asphalt Raleigh NC',
-  },
-  {
-    name: 'Andre W.',
-    role: 'Striping & Marking Lead',
-    image: '/images/projects/project-4.jpg',
-    alt: 'Andre - Striping Lead Freedom Asphalt Raleigh NC',
-  },
+  { name: 'Wesley', role: 'Owner / Operator' },
+  { name: 'Marcus T.', role: 'Lead Foreman' },
+  { name: 'Chris D.', role: 'Sealcoating Specialist' },
+  { name: 'Andre W.', role: 'Striping & Marking Lead' },
 ];
+
+function AvatarPlaceholder() {
+  return (
+    <svg viewBox="0 0 200 260" className="w-full h-full" aria-hidden="true">
+      <rect width="200" height="260" fill="#e5e7eb" />
+      <circle cx="100" cy="95" r="40" fill="#9ca3af" />
+      <ellipse cx="100" cy="210" rx="65" ry="50" fill="#9ca3af" />
+    </svg>
+  );
+}
 
 export default function TeamSection() {
   return (
@@ -49,13 +37,7 @@ export default function TeamSection() {
               className="group text-center"
             >
               <div className="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4 card-elevated border-b-4 border-primary">
-                <Image
-                  src={member.image}
-                  alt={member.alt}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <AvatarPlaceholder />
               </div>
               <h3 className="text-xl font-bold text-secondary uppercase">
                 {member.name}
